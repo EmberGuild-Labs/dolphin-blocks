@@ -146,14 +146,23 @@
     els.btnSave.addEventListener("click", () => {
         const state = Blockly.serialization.workspaces.save(workspace);
         const data = JSON.stringify({ name: currentAppName(), blocks: state }, null, 2);
+        const filename = currentAppName().replace(/[^a-z0-9]+/gi, "_").toLowerCase() + ".dolphin";
+
+        // In the native macOS app, use its Save panel (WKWebView can't download).
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.saveFile) {
+            window.webkit.messageHandlers.saveFile.postMessage({ name: filename, text: data });
+            toast("Choose where to save…");
+            return;
+        }
+
         const blob = new Blob([data], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = currentAppName().replace(/[^a-z0-9]+/gi, "_").toLowerCase() + ".dolphin";
+        a.download = filename;
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
-        toast("Project saved");
+        toast("Project saved to your Downloads folder");
     });
 
     els.btnLoad.addEventListener("click", () => els.fileInput.click());

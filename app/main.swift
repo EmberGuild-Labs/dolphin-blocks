@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
         let config = WKWebViewConfiguration()
         config.userContentController.add(self, name: "saveZip")
+        config.userContentController.add(self, name: "saveFile")
         web = WKWebView(frame: frame, configuration: config)
         web.autoresizingMask = [.width, .height]
         window.contentView = web
@@ -37,20 +38,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler
 
     func applicationShouldTerminateAfterLastWindowClosed(_ app: NSApplication) -> Bool { true }
 
-    // Receives { name, b64 } from the editor's Export button.
+    // Receives { name, b64 } from Export (saveZip) or { name, text } from Save
+    // (saveFile), and writes the file wherever the user chooses.
     func userContentController(
         _ controller: WKUserContentController, didReceive message: WKScriptMessage
     ) {
-        guard message.name == "saveZip",
-              let body = message.body as? [String: Any],
-              let name = body["name"] as? String,
-              let b64 = body["b64"] as? String,
-              let data = Data(base64Encoded: b64)
+        guard let body = message.body as? [String: Any],
+              let name = body["name"] as? String
         else { return }
+
+        var data: Data?
+        if message.name == "saveZip", let b64 = body["b64"] as? String {
+            data = Data(base64Encoded: b64)
+        } else if message.name == "saveFile", let text = body["text"] as? String {
+            data = text.data(using: .utf8)
+        }
+        guard let data = data else { return }
 
         let panel = NSSavePanel()
         panel.nameFieldStringValue = name
-        if #available(macOS 11.0, *) {
+        if #available(macOS 11.0, *), name.hasSuffix(".zip") {
             panel.allowedContentTypes = [UTType.zip]
         }
         panel.canCreateDirectories = true

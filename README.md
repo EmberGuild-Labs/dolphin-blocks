@@ -46,8 +46,20 @@ Then open <http://127.0.0.1:8777/editor/index.html>.
 3. Click **View C** any time to see the exact Flipper C it generates.
 4. Click **Export app** to download `<yourapp>.zip`.
 
-**Save / Open** store your project as a `.dolphin` file so you can come back to it.
-Your work is also auto-saved in the browser between sessions.
+### Where your projects are saved
+
+- **Auto-save:** your current blocks are saved automatically as you work and come
+  back when you reopen Dolphin Blocks — so you never lose in-progress work. This
+  lives in the app's own local storage (not a file you manage), and it only keeps
+  the *latest* project.
+- **Save** writes a `.dolphin` file (your project you can keep, share, or back up).
+  In the **macOS app** a Save dialog lets you choose the folder. In a **browser**
+  it downloads to your Downloads folder.
+- **Open** loads a `.dolphin` file back into the editor.
+- **Export app** writes the buildable `.zip` — again, you pick the folder in the
+  app, or it goes to Downloads in a browser.
+
+To keep several projects, use **Save** and give each one its own `.dolphin` file.
 
 ---
 
