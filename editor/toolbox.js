@@ -189,6 +189,28 @@ const DOLPHIN_TOOLBOX = {
         },
         {
             kind: "category",
+            name: "Functions",
+            colour: "#9C5BD1",
+            contents: [
+                { kind: "block", type: "db_func_define" },
+                { kind: "block", type: "db_func_call" },
+            ],
+        },
+        {
+            kind: "category",
+            name: "Lists",
+            colour: "#2FA1A6",
+            contents: [
+                { kind: "block", type: "db_list_add", inputs: { VALUE: num(0) } },
+                { kind: "block", type: "db_list_get", inputs: { INDEX: num(1) } },
+                { kind: "block", type: "db_list_set", inputs: { INDEX: num(1), VALUE: num(0) } },
+                { kind: "block", type: "db_list_foreach" },
+                { kind: "block", type: "db_list_length" },
+                { kind: "block", type: "db_list_clear" },
+            ],
+        },
+        {
+            kind: "category",
             name: "Files",
             colour: "#B07D3C",
             contents: [

@@ -23,6 +23,7 @@ FILES = [
     "db_ble.c",
     "db_uart.c",
     "db_file.c",
+    "db_list.c",
 ]
 
 def main():

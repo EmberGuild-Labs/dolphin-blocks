@@ -20,6 +20,8 @@ const C_BLE = "#2E7DFF";
 const C_GPIO = "#8B5CF6";
 const C_UART = "#10B981";
 const C_FILE = "#B07D3C";
+const C_FUNC = "#9C5BD1";
+const C_LIST = "#2FA1A6";
 
 /* Shared dropdown option lists */
 const PIN_OPTIONS = [
@@ -718,5 +720,100 @@ Blockly.defineBlocksWithJsonArray([
         nextStatement: null,
         colour: C_FILE,
         tooltip: "Delete a file from the SD card.",
+    },
+
+    /* ---------------- Functions ---------------- */
+    {
+        type: "db_func_define",
+        message0: "define function %1 %2 %3",
+        args0: [
+            { type: "field_input", name: "NAME", text: "myFunction" },
+            { type: "input_dummy" },
+            { type: "input_statement", name: "BODY" },
+        ],
+        colour: C_FUNC,
+        tooltip: "Define a reusable function — a named group of blocks. It shares your variables and lists. Run it with 'call function'.",
+    },
+    {
+        type: "db_func_call",
+        message0: "call function %1",
+        args0: [{ type: "field_input", name: "NAME", text: "myFunction" }],
+        previousStatement: null,
+        nextStatement: null,
+        colour: C_FUNC,
+        tooltip: "Run a function you defined (names must match).",
+    },
+
+    /* ---------------- Lists (of numbers) ---------------- */
+    {
+        type: "db_list_add",
+        message0: "add %1 to list %2",
+        args0: [
+            { type: "input_value", name: "VALUE", check: "Number" },
+            { type: "field_input", name: "LIST", text: "scores" },
+        ],
+        inputsInline: true,
+        previousStatement: null,
+        nextStatement: null,
+        colour: C_LIST,
+        tooltip: "Add a number to the end of a list.",
+    },
+    {
+        type: "db_list_get",
+        message0: "list %1 item %2",
+        args0: [
+            { type: "field_input", name: "LIST", text: "scores" },
+            { type: "input_value", name: "INDEX", check: "Number" },
+        ],
+        inputsInline: true,
+        output: "Number",
+        colour: C_LIST,
+        tooltip: "Get the number at a position (1 = first item). 0 if out of range.",
+    },
+    {
+        type: "db_list_set",
+        message0: "set list %1 item %2 to %3",
+        args0: [
+            { type: "field_input", name: "LIST", text: "scores" },
+            { type: "input_value", name: "INDEX", check: "Number" },
+            { type: "input_value", name: "VALUE", check: "Number" },
+        ],
+        inputsInline: true,
+        previousStatement: null,
+        nextStatement: null,
+        colour: C_LIST,
+        tooltip: "Replace the number at a position (1 = first item).",
+    },
+    {
+        type: "db_list_foreach",
+        message0: "for each item in list %1 as %2 %3 %4",
+        args0: [
+            { type: "field_input", name: "LIST", text: "scores" },
+            { type: "field_input", name: "VAR", text: "item" },
+            { type: "input_dummy" },
+            { type: "input_statement", name: "DO" },
+        ],
+        inputsInline: true,
+        previousStatement: null,
+        nextStatement: null,
+        colour: C_LIST,
+        tooltip: "Run the blocks once for each number in the list. The number variable holds the current item.",
+    },
+    {
+        type: "db_list_length",
+        message0: "length of list %1",
+        args0: [{ type: "field_input", name: "LIST", text: "scores" }],
+        output: "Number",
+        colour: C_LIST,
+        tooltip: "How many numbers are in the list.",
+    },
+    {
+        type: "db_list_clear",
+        message0: "clear list %1",
+        args0: [{ type: "field_input", name: "LIST", text: "scores" }],
+        previousStatement: null,
+        nextStatement: null,
+        colour: C_LIST,
+        tooltip: "Empty the list.",
     },
 ]);

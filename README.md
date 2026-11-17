@@ -95,11 +95,27 @@ To only build the `.fap` (and find it under `dist/`), run `ufbt` on its own.
 | **Bluetooth** | broadcast a BLE beacon by **name**, by **name + custom MAC**, or raw advertising bytes; stop broadcasting |
 | **GPIO** | set pins input/output, read/write pins, PWM on pin A4 |
 | **WiFi / Serial** | open the UART to an ESP32 dev board (or anything serial), send/receive lines |
+| **Functions** | define a named, reusable group of blocks and call it anywhere; functions share your variables and lists |
+| **Lists** | number lists: add, get/set an item (1-based), **for each** item, length, clear |
 | **Files** | **pick file** (opens the Flipper's native file browser and returns the chosen path), check a file exists, read a line (or count lines), append/overwrite text, delete a file |
 
-Any block that takes a file path (IR/Sub-GHz/NFC file, the file blocks) now has a
-path *socket* — type a path into it, or drop a **pick file** block in to choose
-the file on the Flipper itself with its built-in file browser.
+### Choosing files (the file picker)
+
+Any block that takes a file path — IR/Sub-GHz/NFC "send file", and the Files
+blocks — has a path *socket*. You can either:
+
+- **type the path** into the little text box in the socket (e.g. `/ext/subghz/gate.sub`), or
+- drop a **pick file** block (Files category) into that socket.
+
+`pick file` takes a starting folder and a type filter (`.ir`, `.sub`, `.nfc`,
+`.txt`, or *any*). When the app runs on the Flipper, it opens the Flipper's own
+file browser so you scroll to and select the file **on the device** — then it
+hands the chosen path straight to the block it's plugged into. Example:
+
+> Sub-GHz send file **[ pick file in `/ext/subghz` type `.sub` ]**
+
+On the computer there's no live view of the Flipper's SD card, which is why the
+picker runs on the Flipper itself at run time.
 
 ### Running an exported app on the Flipper
 
@@ -181,7 +197,8 @@ dolphin/
 │   ├── db_nfc.c            # NFC
 │   ├── db_ble.c            # BLE beacon
 │   ├── db_uart.c           # UART / WiFi dev board
-│   └── db_file.c           # SD-card files
+│   ├── db_file.c           # SD-card files + native file picker
+│   └── db_list.c           # number-list helpers
 ├── app/                    # macOS wrapper (Swift) + icon
 ├── tools/                  # bundle_runtime.py, build_app.sh
 ├── examples/               # sample .dolphin projects

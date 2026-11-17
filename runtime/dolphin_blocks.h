@@ -175,6 +175,15 @@ void db_uart_writeln(DbCtx* ctx, const char* text);    // appends CRLF
 bool db_uart_read_line(DbCtx* ctx, uint32_t timeout_ms, char* out, size_t out_sz);
 
 // ---------------------------------------------------------------------------
+// Lists (of numbers). Generated code declares `float L_x[DB_LIST_CAP]` + an int
+// length; these helpers keep every access bounds-safe (1-based indices).
+// ---------------------------------------------------------------------------
+#define DB_LIST_CAP 64
+void db_list_add(float* arr, int* len, int cap, float value);
+float db_list_get(const float* arr, int len, int index1); // 0 if out of range
+void db_list_set(float* arr, int len, int index1, float value); // ignored if OOR
+
+// ---------------------------------------------------------------------------
 // Files (SD card, under /ext/...). Simple, stateless helpers.
 // ---------------------------------------------------------------------------
 bool db_file_exists(DbCtx* ctx, const char* path);
