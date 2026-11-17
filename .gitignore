@@ -1,0 +1,15 @@
+# Build artifacts
+build/
+dist/
+*.dmg
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# ufbt / Flipper build output
+.ufbt/
+dist/

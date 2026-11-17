@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dolphin Blocks</title>
+    <meta name="description" content="Visual block editor that turns drag-and-drop blocks into a working Flipper Zero app." />
+    <!-- Blockly 11.1.1 bundled locally so the editor works fully offline. -->
+    <script src="vendor/blockly.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-name">Dolphin&nbsp;Blocks</span>
+        </div>
+
+        <label class="appname">
+            <span class="appname-label">App&nbsp;name</span>
+            <input id="app-name" type="text" value="My Flipper App" maxlength="32"
+                   autocomplete="off" spellcheck="false" />
+        </label>
+
+        <div class="toolbar">
+            <button id="btn-new" class="btn" type="button">New</button>
+            <button id="btn-save" class="btn" type="button">Save</button>
+            <button id="btn-load" class="btn" type="button">Open</button>
+            <button id="btn-code" class="btn" type="button" aria-pressed="false">View&nbsp;C</button>
+            <button id="btn-export" class="btn btn-primary" type="button">Export app ↓</button>
+        </div>
+        <input id="file-input" type="file" accept=".dolphin,.json" hidden />
+    </header>
+
+    <main class="workbench">
+        <div id="blockly-area" class="blockly-area"></div>
+
+        <aside id="code-panel" class="code-panel" hidden aria-label="Generated C code">
+            <div class="code-panel-head">
+                <h2>Generated C</h2>
+                <button id="btn-code-close" class="btn btn-ghost" type="button" aria-label="Hide C code">✕</button>
+            </div>
+            <pre id="code-out" class="code-out" tabindex="0"></pre>
+        </aside>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <!-- Hidden Blockly toolbox markup -->
+    <xml id="toolbox" style="display:none"></xml>
+
+    <script src="runtime_sources.js"></script>
+    <script src="blocks.js"></script>
+    <script src="generator.js"></script>
+    <script src="toolbox.js"></script>
+    <script src="export.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
