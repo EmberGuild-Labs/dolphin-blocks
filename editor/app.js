@@ -48,6 +48,8 @@
         btnNew: document.getElementById("btn-new"),
         btnSave: document.getElementById("btn-save"),
         btnLoad: document.getElementById("btn-load"),
+        btnImport: document.getElementById("btn-import"),
+        importInput: document.getElementById("import-input"),
         btnCode: document.getElementById("btn-code"),
         btnCodeClose: document.getElementById("btn-code-close"),
         btnExport: document.getElementById("btn-export"),
@@ -182,6 +184,35 @@
         };
         reader.readAsText(file);
         els.fileInput.value = "";
+    });
+
+    // Import Dolphin-Blocks-style C back into blocks.
+    els.btnImport.addEventListener("click", () => els.importInput.click());
+    els.importInput.addEventListener("change", (ev) => {
+        const file = ev.target.files && ev.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const result = window.dolphinImportC(String(reader.result));
+                workspace.clear();
+                if (result.appName) els.appName.value = result.appName;
+                Blockly.serialization.workspaces.load(result.state, workspace);
+                Blockly.svgResize(workspace);
+                refreshCode();
+                if (result.warnings && result.warnings.length) {
+                    toast("Imported with " + result.warnings.length + " line(s) it couldn't map");
+                    console.warn("Dolphin import warnings:", result.warnings);
+                } else {
+                    toast("Imported to blocks");
+                }
+            } catch (e) {
+                toast("Import failed: " + e.message);
+                console.error(e);
+            }
+        };
+        reader.readAsText(file);
+        els.importInput.value = "";
     });
 
     function setCodeVisible(show) {

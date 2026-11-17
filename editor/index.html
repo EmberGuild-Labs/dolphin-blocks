@@ -25,10 +25,12 @@
             <button id="btn-new" class="btn" type="button">New</button>
             <button id="btn-save" class="btn" type="button">Save</button>
             <button id="btn-load" class="btn" type="button">Open</button>
+            <button id="btn-import" class="btn" type="button">Import C</button>
             <button id="btn-code" class="btn" type="button" aria-pressed="false">View&nbsp;C</button>
             <button id="btn-export" class="btn btn-primary" type="button">Export app ↓</button>
         </div>
         <input id="file-input" type="file" accept=".dolphin,.json" hidden />
+        <input id="import-input" type="file" accept=".c,.txt" hidden />
     </header>
 
     <main class="workbench">
@@ -53,6 +55,7 @@
     <script src="generator.js"></script>
     <script src="toolbox.js"></script>
     <script src="export.js"></script>
+    <script src="importer.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

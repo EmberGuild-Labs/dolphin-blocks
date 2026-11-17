@@ -61,6 +61,19 @@ Then open <http://127.0.0.1:8777/editor/index.html>.
 
 To keep several projects, use **Save** and give each one its own `.dolphin` file.
 
+### Import C → blocks (reverse)
+
+**Import C** turns Dolphin-Blocks C back into editable blocks. Point it at a
+`.c` file and it rebuilds the block program — including functions, lists,
+loops, if/else and all the `db_*` calls. Exporting an app and re-importing its
+`generated_main.c` round-trips to the exact same blocks.
+
+It understands the **`db_*` subset this tool produces** (your exported apps, or
+C hand-written to the same API) — it is *not* a general Flipper decompiler and
+can't import arbitrary firmware apps (full C with custom GUIs, threads, view
+dispatchers, etc.). Anything it can't map is flagged, and the rest still comes
+through.
+
 ---
 
 ## Turning an export into an app on your Flipper
