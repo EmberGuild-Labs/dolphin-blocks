@@ -96,7 +96,7 @@ To only build the `.fap` (and find it under `dist/`), run `ufbt` on its own.
 | **GPIO** | set pins input/output, read/write pins, PWM on pin A4 |
 | **WiFi / Serial** | open the UART to an ESP32 dev board (or anything serial), send/receive lines |
 | **Functions** | define a named, reusable group of blocks and call it anywhere; functions share your variables and lists |
-| **Lists** | number lists: add, get/set an item (1-based), **for each** item, length, clear |
+| **Lists** | **number lists** and **text lists**: add, get/set an item (1-based), **for each** item, length, clear |
 | **Files** | **pick file** (opens the Flipper's native file browser and returns the chosen path), check a file exists, read a line (or count lines), append/overwrite text, delete a file |
 
 ### Choosing files (the file picker)

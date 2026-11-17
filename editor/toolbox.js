@@ -207,6 +207,13 @@ const DOLPHIN_TOOLBOX = {
                 { kind: "block", type: "db_list_foreach" },
                 { kind: "block", type: "db_list_length" },
                 { kind: "block", type: "db_list_clear" },
+                { kind: "label", text: "Text lists" },
+                { kind: "block", type: "db_tlist_add", inputs: { VALUE: txt("hello") } },
+                { kind: "block", type: "db_tlist_get", inputs: { INDEX: num(1) } },
+                { kind: "block", type: "db_tlist_set", inputs: { INDEX: num(1), VALUE: txt("hi") } },
+                { kind: "block", type: "db_tlist_foreach" },
+                { kind: "block", type: "db_tlist_length" },
+                { kind: "block", type: "db_tlist_clear" },
             ],
         },
         {

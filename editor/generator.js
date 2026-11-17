@@ -21,7 +21,8 @@ dolphinC.init = function (workspace) {
     this.numVars_ = Object.create(null); // cid -> true
     this.txtVars_ = Object.create(null);
     this.functions_ = Object.create(null); // fn name -> body code
-    this.numLists_ = Object.create(null); // list name -> true
+    this.numLists_ = Object.create(null); // number-list name -> true
+    this.txtLists_ = Object.create(null); // text-list name -> true
     this.loopDepth_ = 0;
     this.nameDB_ = Object.create(null);
 };
@@ -71,7 +72,10 @@ dolphinC.finish = function (code) {
     const listDecls = Object.keys(this.numLists_).sort().map(
         (v) => `static float ${v}[DB_LIST_CAP];\nstatic int ${v}_len = 0;`
     );
-    const decls = numDecls.concat(txtDecls).concat(listDecls);
+    const tlistDecls = Object.keys(this.txtLists_).sort().map(
+        (v) => `static char ${v}[DB_TLIST_CAP][DB_TLIST_STR];\nstatic int ${v}_len = 0;`
+    );
+    const decls = numDecls.concat(txtDecls).concat(listDecls).concat(tlistDecls);
     const fnNames = Object.keys(this.functions_);
 
     let out = "";
@@ -162,6 +166,53 @@ G.forBlock["db_list_length"] = function (block) {
 G.forBlock["db_list_clear"] = function (block) {
     const list = dbCid("L_", block.getFieldValue("LIST"));
     G.numLists_[list] = true;
+    return "    " + list + "_len = 0;\n";
+};
+
+/* ======================= Lists (of text) ======================= */
+G.forBlock["db_tlist_add"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
+    const val = G.valueOr(block, "VALUE", G.ORDER_NONE, '""');
+    return "    db_tlist_add(" + list + ", &" + list + "_len, DB_TLIST_CAP, " + val + ");\n";
+};
+G.forBlock["db_tlist_get"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
+    const idx = G.valueOr(block, "INDEX", G.ORDER_NONE, "1");
+    return ["db_tlist_get(" + list + ", " + list + "_len, (int)(" + idx + "))", G.ORDER_ATOMIC];
+};
+G.forBlock["db_tlist_set"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
+    const idx = G.valueOr(block, "INDEX", G.ORDER_NONE, "1");
+    const val = G.valueOr(block, "VALUE", G.ORDER_NONE, '""');
+    return "    db_tlist_set(" + list + ", " + list + "_len, (int)(" + idx + "), " + val + ");\n";
+};
+G.forBlock["db_tlist_foreach"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
+    const v = dbCid("s_", block.getFieldValue("VAR"));
+    G.txtVars_[v] = true;
+    const idx = "i" + G.loopDepth_;
+    G.loopDepth_++;
+    const body = G.statementToCode(block, "DO");
+    G.loopDepth_--;
+    return (
+        "    for (int " + idx + " = 1; " + idx + " <= " + list + "_len && !db_should_stop(ctx); " + idx + "++) {\n" +
+        "    snprintf(" + v + ", sizeof(" + v + '), "%s", db_tlist_get(' + list + ", " + list + "_len, " + idx + "));\n" +
+        body +
+        "    }\n"
+    );
+};
+G.forBlock["db_tlist_length"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
+    return [list + "_len", G.ORDER_ATOMIC];
+};
+G.forBlock["db_tlist_clear"] = function (block) {
+    const list = dbCid("TL_", block.getFieldValue("LIST"));
+    G.txtLists_[list] = true;
     return "    " + list + "_len = 0;\n";
 };
 

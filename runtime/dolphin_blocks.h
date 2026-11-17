@@ -183,6 +183,13 @@ void db_list_add(float* arr, int* len, int cap, float value);
 float db_list_get(const float* arr, int len, int index1); // 0 if out of range
 void db_list_set(float* arr, int len, int index1, float value); // ignored if OOR
 
+// Text lists: each item is a fixed-size string.
+#define DB_TLIST_CAP 32
+#define DB_TLIST_STR 64
+void db_tlist_add(char list[][DB_TLIST_STR], int* len, int cap, const char* value);
+const char* db_tlist_get(char list[][DB_TLIST_STR], int len, int index1); // "" if OOR
+void db_tlist_set(char list[][DB_TLIST_STR], int len, int index1, const char* value);
+
 // ---------------------------------------------------------------------------
 // Files (SD card, under /ext/...). Simple, stateless helpers.
 // ---------------------------------------------------------------------------
